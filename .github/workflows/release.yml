@@ -62,17 +62,19 @@ jobs:
       - name: Extract release notes from CHANGELOG
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          ./scripts/changelog-section.sh "$VERSION" CHANGELOG.md > release-notes.md
-          if [ ! -s release-notes.md ]; then
+          NOTES_FILE="$RUNNER_TEMP/release-notes.md"
+          ./scripts/changelog-section.sh "$VERSION" CHANGELOG.md > "$NOTES_FILE"
+          if [ ! -s "$NOTES_FILE" ]; then
             echo "::error::no CHANGELOG.md section for $VERSION"
             exit 1
           fi
-          echo "--- release-notes.md ---"
-          cat release-notes.md
+          echo "RELEASE_NOTES_FILE=$NOTES_FILE" >> "$GITHUB_ENV"
+          echo "--- $NOTES_FILE ---"
+          cat "$NOTES_FILE"
       - uses: goreleaser/goreleaser-action@v7
         with:
           version: '~> v2'
-          args: release --clean --release-notes=release-notes.md
+          args: release --clean --release-notes=${{ env.RELEASE_NOTES_FILE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
