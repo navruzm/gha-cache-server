@@ -9,7 +9,7 @@ The GitHub Actions runner overwrites `ACTIONS_RESULTS_URL` on every step from th
 
 ## Recommended: Node.js preload
 
-`actions/cache@v4` reads `process.env.ACTIONS_RESULTS_URL` at runtime. By setting `NODE_OPTIONS=--require=/path/to/preload.js` in the runner's host environment, every Node-based action loads a preload script before its own code — including `actions/cache`. The preload mutates the env var in-process; the runner never gets a chance to put it back.
+`actions/cache@v4` and `@v5` both read `process.env.ACTIONS_RESULTS_URL` at runtime. By setting `NODE_OPTIONS=--require=/path/to/preload.js` in the runner's host environment, every Node-based action loads a preload script before its own code — including `actions/cache`. The preload mutates the env var in-process; the runner never gets a chance to put it back.
 
 The preload (in this repo at `runner/preload.js`):
 
@@ -88,7 +88,7 @@ kubectl apply -f runner/runner-deployment.example.yaml
 
 ## Caveat: container actions
 
-The preload only runs inside the runner's own Node process. Container actions (`uses: docker://...` or `Dockerfile`-based actions) run in their own image, with their own Node. The preload does not propagate. For `actions/cache@v4` this is fine — it's a JavaScript action, not a container action — but if you rely on a third-party container action that talks to the cache, that traffic still goes to GitHub.
+The preload only runs inside the runner's own Node process. Container actions (`uses: docker://...` or `Dockerfile`-based actions) run in their own image, with their own Node. The preload does not propagate. For `actions/cache` (v4 and v5) this is fine — it's a JavaScript action, not a container action — but if you rely on a third-party container action that talks to the cache, that traffic still goes to GitHub.
 
 If that matters to you, fall back to the binary patch or run a forked runner.
 

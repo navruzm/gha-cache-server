@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'GHA Cache Server',
-  description: 'Self-hosted GitHub Actions cache server. Drop-in compatible with actions/cache.',
+  description: 'Self-hosted GitHub Actions cache server. Drop-in compatible with actions/cache@v4 and @v5.',
   cleanUrls: true,
   themeConfig: {
     nav: [

@@ -1,6 +1,8 @@
 # GitHub Actions Cache Server
 
-A drop-in replacement for the GitHub Actions cache, compatible with `actions/cache@v4`. Single static binary, ~12 MB. Three storage backends (filesystem / S3 / GCS), three database backends (SQLite / Postgres / MySQL).
+A drop-in replacement for the GitHub Actions cache, compatible with `actions/cache@v4` and `actions/cache@v5` (both speak the cache-service v2 protocol). Single static binary, ~12 MB. Three storage backends (filesystem / S3 / GCS), three database backends (SQLite / Postgres / MySQL).
+
+> `actions/cache@v3` and earlier use the legacy `_apis/artifactcache` (v1) protocol and were sunset by GitHub on 2025-02-01. We don't implement v1; if you're still on v3, upgrade to v4 or v5 first.
 
 > Go reimplementation of the protocol popularised by [falcondev-oss/github-actions-cache-server](https://github.com/falcondev-oss/github-actions-cache-server) (MIT). All code in this repo is original.
 

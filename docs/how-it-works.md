@@ -4,7 +4,9 @@ title: How it works
 
 # How it works
 
-The cache server reproduces the GitHub Actions cache wire protocol so that an unmodified `actions/cache` (v3 or v4) can save and restore caches against it.
+The cache server reproduces the **cache-service v2** wire protocol so that an unmodified `actions/cache@v4` or `actions/cache@v5` can save and restore caches against it. Both action versions speak the same protocol — v5 just runs on Node 24 and requires runner ≥ 2.327.1.
+
+`actions/cache@v3` (and earlier) used the legacy `_apis/artifactcache` v1 protocol, which GitHub sunset on 2025-02-01. We don't implement v1; upgrade to v4 or v5.
 
 ## Protocol surface
 

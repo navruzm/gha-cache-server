@@ -4,7 +4,7 @@ layout: home
 hero:
   name: GitHub Actions
   text: Cache Server
-  tagline: A small, fast, self-hosted GitHub Actions cache. Drop-in compatible with actions/cache. Single static binary.
+  tagline: A small, fast, self-hosted GitHub Actions cache. Drop-in compatible with actions/cache@v4 and @v5. Single static binary.
   actions:
     - theme: brand
       text: Get Started
