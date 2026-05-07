@@ -4,7 +4,7 @@ title: Helm Chart
 
 # Helm Chart
 
-The chart lives at `install/kubernetes/gha-cache-server` in the repo and is published to `oci://ghcr.io/navruzm/charts/gha-cache-server`.
+The chart lives at `charts/gha-cache-server` in the repo and is published to `oci://ghcr.io/navruzm/charts/gha-cache-server`.
 
 ## Install
 

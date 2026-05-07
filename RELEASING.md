@@ -21,7 +21,7 @@ On `v*` tag push, `.github/workflows/release.yml` runs three jobs in parallel-is
 
 - **build-image** — multi-arch (`linux/amd64`, `linux/arm64`) Docker image to `ghcr.io/<owner>/<repo>` with semver, branch, and `latest` tags.
 - **release-binaries** — Linux/macOS/Windows × amd64/arm64 archives via `mise run release-binaries` (goreleaser). Release notes are extracted from `CHANGELOG.md` by `mise run release-notes -- $VERSION`.
-- **publish-chart** — the Helm chart in `install/kubernetes/gha-cache-server` is repackaged with `mise run helm-package -- $VERSION` and pushed via `mise run helm-push` to `oci://ghcr.io/<owner>/charts`.
+- **publish-chart** — the Helm chart in `charts/gha-cache-server` is repackaged with `mise run helm-package -- $VERSION` and pushed via `mise run helm-push` to `oci://ghcr.io/<owner>/charts`.
 
 Tool versions (Go, Node, helm, golangci-lint, goreleaser) and the underlying commands all live in `mise.toml`. To preview a release locally, run `mise run release-notes -- 0.2.0` against your draft CHANGELOG section.
 

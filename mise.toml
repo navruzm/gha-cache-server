@@ -48,10 +48,10 @@ run = 'CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o cache-server ./cmd/c
 [tasks.helm-lint]
 description = "Lint the helm chart and render every CI value file"
 run = '''
-helm lint install/kubernetes/gha-cache-server
-for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
+helm lint charts/gha-cache-server
+for f in charts/gha-cache-server/ci/*.yaml; do
   echo "=== $f ==="
-  helm template test install/kubernetes/gha-cache-server -f "$f" > /dev/null
+  helm template test charts/gha-cache-server -f "$f" > /dev/null
 done
 '''
 
@@ -72,7 +72,7 @@ description = "Package the helm chart with appVersion/version synced to a releas
 run = '''
 set -euo pipefail
 VERSION="${1:?version required, e.g. 0.1.0}"
-CHART_DIR=install/kubernetes/gha-cache-server
+CHART_DIR=charts/gha-cache-server
 sed -i -E "s/^appVersion:.*$/appVersion: \"$VERSION\"/" "$CHART_DIR/Chart.yaml"
 sed -i -E "s/^version:.*$/version: $VERSION/" "$CHART_DIR/Chart.yaml"
 helm package "$CHART_DIR" --destination packaged
