@@ -1,0 +1,9 @@
+config:
+  storage:
+    driver: filesystem
+    filesystem:
+      path: /data/cache
+  db:
+    driver: sqlite
+    sqlite:
+      path: /data/cache-server.db

@@ -1,0 +1,12 @@
+replicaCount: 3
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+config:
+  storage:
+    driver: filesystem
+  db:
+    driver: postgres
+    postgres:
+      url: postgres://u:p@pg:5432/db

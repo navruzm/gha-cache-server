@@ -1,0 +1,23 @@
+{{- if eq (include "ghacs.pvcEnabled" .) "true" -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "ghacs.pvcName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ghacs.labels" . | nindent 4 }}
+    {{- with .Values.persistentVolumeClaim.labels }}{{- toYaml . | nindent 4 }}{{- end }}
+  {{- with .Values.persistentVolumeClaim.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+    {{- include "ghacs.pvcAccessModes" . | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolumeClaim.storage }}
+  volumeMode: Filesystem
+  {{- with .Values.persistentVolumeClaim.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
+{{- end }}

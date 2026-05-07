@@ -1,0 +1,12 @@
+GitHub Actions Cache Server deployed.
+
+  Release:   {{ .Release.Name }}
+  Namespace: {{ .Release.Namespace }}
+  Storage:   {{ .Values.config.storage.driver }}
+  Database:  {{ .Values.config.db.driver }}
+
+{{- with .Values.config.apiBaseUrl }}
+  API URL:   {{ . }}
+{{- end }}
+
+Set ACTIONS_RESULTS_URL on your runners to the API URL.

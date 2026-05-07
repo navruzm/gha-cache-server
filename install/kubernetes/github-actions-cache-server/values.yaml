@@ -1,0 +1,109 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/navruzm/github-actions-cache-server-go
+  pullPolicy: IfNotPresent
+  tag: ""
+  variant: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+config:
+  apiBaseUrl: ""
+  enableDirectDownloads: false
+  cacheCleanupOlderThanDays: 90
+  managementApiKey: ""
+
+  storage:
+    driver: filesystem
+    filesystem:
+      path: /data/cache
+    s3: {}
+    gcs: {}
+
+  db:
+    driver: sqlite
+    sqlite:
+      path: /data/cache-server.db
+    postgres: {}
+    mysql: {}
+
+existingSecret: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  capabilities:
+    drop: [ALL]
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+
+service:
+  type: ClusterIP
+  port: 3000
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  limits:
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: cache
+readinessProbe:
+  httpGet:
+    path: /health
+    port: cache
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 70
+
+persistentVolumeClaim:
+  enabled: null
+  accessModes:
+    - ReadWriteOnce
+  storage: 20Gi
+  annotations: {}
+  labels: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+extraEnv: []
+extraEnvFrom: []
+topologySpreadConstraints: []
+extraVolumes: []
+extraVolumeMounts: []

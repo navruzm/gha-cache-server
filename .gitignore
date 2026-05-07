@@ -1,0 +1,9 @@
+/cache-server
+/cache-server.exe
+.data/
+*.test
+*.out
+coverage.txt
+.idea/
+.vscode/
+tests/temp/

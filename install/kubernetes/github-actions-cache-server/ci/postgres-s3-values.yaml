@@ -1,0 +1,10 @@
+config:
+  storage:
+    driver: s3
+    s3:
+      bucket: gh-actions-cache
+      region: eu-west-1
+  db:
+    driver: postgres
+    postgres:
+      url: postgres://u:p@pg:5432/db
