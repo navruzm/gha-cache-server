@@ -378,3 +378,26 @@ func (s *Service) Match(ctx context.Context, key, version, scope, repoID string)
 func (s *Service) Q() *dbpkg.DB {
 	return s.q.DB()
 }
+
+func (s *Service) OpenMergedSeekable(ctx context.Context, cacheEntryID string) (io.ReadSeekCloser, time.Time, error) {
+	_, loc, err := s.q.FindCacheEntryWithLocation(ctx, cacheEntryID)
+	if err != nil {
+		return nil, time.Time{}, err
+	}
+	if loc == nil || loc.MergedAt == nil {
+		return nil, time.Time{}, nil
+	}
+	sk, ok := s.adapter.(SeekableAdapter)
+	if !ok {
+		return nil, time.Time{}, nil
+	}
+	go func() {
+		_ = s.q.UpdateStorageLastDownloaded(context.Background(), loc.ID, time.Now().UnixMilli())
+	}()
+	r, mt, err := sk.OpenSeekable(ctx, loc.FolderName+"/merged")
+	if errors.Is(err, ErrObjectNotFound) {
+		s.cfg.Logger.Warn("stale cache entry: merged blob missing", "id", cacheEntryID)
+		return nil, time.Time{}, nil
+	}
+	return r, mt, err
+}

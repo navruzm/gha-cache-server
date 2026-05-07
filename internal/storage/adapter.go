@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"time"
 )
 
 var ErrObjectNotFound = errors.New("object not found in storage")
@@ -15,4 +16,8 @@ type Adapter interface {
 	CountFilesInFolder(ctx context.Context, folderName string) (int, error)
 	CreateDownloadURL(ctx context.Context, objectName string) (string, bool, error)
 	Clear(ctx context.Context) error
+}
+
+type SeekableAdapter interface {
+	OpenSeekable(ctx context.Context, objectName string) (io.ReadSeekCloser, time.Time, error)
 }

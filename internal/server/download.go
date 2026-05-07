@@ -8,6 +8,20 @@ import (
 func registerDownload(mux *http.ServeMux, d Deps) {
 	mux.HandleFunc("GET /download/{cacheEntryId}", func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("cacheEntryId")
+
+		seeker, modTime, err := d.Storage.OpenMergedSeekable(r.Context(), id)
+		if err != nil {
+			d.Logger.Error("download", "err", err)
+			http.Error(w, "download failed", http.StatusInternalServerError)
+			return
+		}
+		if seeker != nil {
+			defer seeker.Close()
+			w.Header().Set("Content-Type", "application/octet-stream")
+			http.ServeContent(w, r, "", modTime, seeker)
+			return
+		}
+
 		stream, err := d.Storage.Download(r.Context(), id)
 		if err != nil {
 			d.Logger.Error("download", "err", err)

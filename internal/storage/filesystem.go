@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type FilesystemAdapter struct {
@@ -111,4 +112,24 @@ func (a *FilesystemAdapter) Clear(_ context.Context) error {
 		return err
 	}
 	return os.MkdirAll(a.root, 0o755)
+}
+
+func (a *FilesystemAdapter) OpenSeekable(_ context.Context, objectName string) (io.ReadSeekCloser, time.Time, error) {
+	p, err := a.safe(objectName)
+	if err != nil {
+		return nil, time.Time{}, err
+	}
+	f, err := os.Open(p)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil, time.Time{}, ErrObjectNotFound
+	}
+	if err != nil {
+		return nil, time.Time{}, err
+	}
+	fi, err := f.Stat()
+	if err != nil {
+		_ = f.Close()
+		return nil, time.Time{}, err
+	}
+	return f, fi.ModTime(), nil
 }
