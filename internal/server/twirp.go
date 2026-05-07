@@ -20,6 +20,12 @@ type twirpKeyVersion struct {
 	Version string `json:"version"`
 }
 
+type twirpFinalizeBody struct {
+	Key       string `json:"key"`
+	Version   string `json:"version"`
+	SizeBytes string `json:"size_bytes"`
+}
+
 type twirpKeyRestoreVersion struct {
 	Key         string   `json:"key"`
 	RestoreKeys []string `json:"restore_keys"`
@@ -63,7 +69,10 @@ func twirpCreate(d Deps) http.HandlerFunc {
 			return
 		}
 		if u == nil {
-			writeJSON(w, http.StatusOK, map[string]any{"ok": false})
+			writeJSON(w, http.StatusOK, map[string]any{
+				"ok":      false,
+				"message": "an upload for this key+version is already in progress",
+			})
 			return
 		}
 		writeJSON(w, http.StatusOK, map[string]any{
@@ -96,7 +105,10 @@ func twirpGet(d Deps) http.HandlerFunc {
 			return
 		}
 		if match == nil {
-			writeJSON(w, http.StatusOK, map[string]any{"ok": false})
+			writeJSON(w, http.StatusOK, map[string]any{
+				"ok":      false,
+				"message": "no cache entry matched the requested keys",
+			})
 			return
 		}
 		writeJSON(w, http.StatusOK, map[string]any{
@@ -114,7 +126,7 @@ func twirpFinalize(d Deps) http.HandlerFunc {
 			writeTwirpErr(w, http.StatusUnauthorized, "unauthenticated", err.Error())
 			return
 		}
-		var body twirpKeyVersion
+		var body twirpFinalizeBody
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Key == "" || body.Version == "" {
 			writeTwirpErr(w, http.StatusBadRequest, "invalid_argument", "key and version required")
 			return
@@ -126,11 +138,18 @@ func twirpFinalize(d Deps) http.HandlerFunc {
 		}
 		u, err := d.Storage.CompleteUpload(r.Context(), body.Key, body.Version, write.Scope, res.RepoID)
 		if err != nil {
-			writeTwirpErr(w, http.StatusInternalServerError, "internal", err.Error())
+			d.Logger.Warn("finalize failed", "key", body.Key, "version", body.Version, "size_bytes", body.SizeBytes, "err", err)
+			writeJSON(w, http.StatusOK, map[string]any{
+				"ok":      false,
+				"message": err.Error(),
+			})
 			return
 		}
 		if u == nil {
-			writeTwirpErr(w, http.StatusNotFound, "not_found", "upload not found")
+			writeJSON(w, http.StatusOK, map[string]any{
+				"ok":      false,
+				"message": "no upload found for this key+version",
+			})
 			return
 		}
 		writeJSON(w, http.StatusOK, map[string]any{"ok": true, "entry_id": strconvFormatInt(u.ID)})

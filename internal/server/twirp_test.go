@@ -146,3 +146,80 @@ func TestTwirp_FinalizeAndGet(t *testing.T) {
 		t.Errorf("got %+v", got)
 	}
 }
+
+func TestTwirp_GetMissReturnsMessage(t *testing.T) {
+	srv, _, tok := newTestServer(t)
+	body, _ := json.Marshal(map[string]any{"key": "missing", "version": "v"})
+	req, _ := http.NewRequest("POST",
+		srv.URL+"/twirp/github.actions.results.api.v1.CacheService/GetCacheEntryDownloadURL",
+		bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+tok)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		t.Fatalf("status=%d", resp.StatusCode)
+	}
+	var got map[string]any
+	_ = json.NewDecoder(resp.Body).Decode(&got)
+	if got["ok"] != false {
+		t.Errorf("expected ok=false, got %+v", got)
+	}
+	if msg, _ := got["message"].(string); msg == "" {
+		t.Errorf("expected non-empty message, got %+v", got)
+	}
+}
+
+func TestTwirp_FinalizeMissingUploadReturns200WithMessage(t *testing.T) {
+	srv, _, tok := newTestServer(t)
+	body, _ := json.Marshal(map[string]any{"key": "nope", "version": "v", "size_bytes": "1234"})
+	req, _ := http.NewRequest("POST",
+		srv.URL+"/twirp/github.actions.results.api.v1.CacheService/FinalizeCacheEntryUpload",
+		bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+tok)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		t.Fatalf("status=%d (expected 200 with ok=false body)", resp.StatusCode)
+	}
+	var got map[string]any
+	_ = json.NewDecoder(resp.Body).Decode(&got)
+	if got["ok"] != false {
+		t.Errorf("expected ok=false, got %+v", got)
+	}
+	if msg, _ := got["message"].(string); msg == "" {
+		t.Errorf("expected non-empty message, got %+v", got)
+	}
+}
+
+func TestTwirp_CreateDuplicateReturnsMessage(t *testing.T) {
+	srv, svc, tok := newTestServer(t)
+	_, _ = svc.CreateUpload(context.Background(), "dup", "v", "main", "42")
+
+	body, _ := json.Marshal(map[string]any{"key": "dup", "version": "v"})
+	req, _ := http.NewRequest("POST",
+		srv.URL+"/twirp/github.actions.results.api.v1.CacheService/CreateCacheEntry",
+		bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+tok)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	var got map[string]any
+	_ = json.NewDecoder(resp.Body).Decode(&got)
+	if got["ok"] != false {
+		t.Errorf("expected ok=false for duplicate, got %+v", got)
+	}
+	if msg, _ := got["message"].(string); msg == "" {
+		t.Errorf("expected non-empty message, got %+v", got)
+	}
+}
