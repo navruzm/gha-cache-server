@@ -21,3 +21,7 @@ type Adapter interface {
 type SeekableAdapter interface {
 	OpenSeekable(ctx context.Context, objectName string) (io.ReadSeekCloser, time.Time, error)
 }
+
+type DiskUsageReporter interface {
+	UsableFreeBytes() (int64, error)
+}

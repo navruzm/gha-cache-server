@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Config struct {
@@ -49,6 +50,9 @@ type Config struct {
 	MySQLPort     int
 	MySQLUser     string
 	MySQLPassword string
+
+	DiskPressureMinFreeBytes    int64
+	DiskPressureTargetFreeBytes int64
 }
 
 type EnvFunc func(string) string
@@ -170,7 +174,59 @@ func Load(env EnvFunc) (*Config, error) {
 		return nil, fmt.Errorf("DB_DRIVER must be sqlite|postgres|mysql, got %q", c.DBDriver)
 	}
 
+	if v := env("DISK_PRESSURE_MIN_FREE_BYTES"); v != "" {
+		n, err := parseBytes(v)
+		if err != nil {
+			return nil, fmt.Errorf("DISK_PRESSURE_MIN_FREE_BYTES: %w", err)
+		}
+		c.DiskPressureMinFreeBytes = n
+	}
+	if v := env("DISK_PRESSURE_TARGET_FREE_BYTES"); v != "" {
+		n, err := parseBytes(v)
+		if err != nil {
+			return nil, fmt.Errorf("DISK_PRESSURE_TARGET_FREE_BYTES: %w", err)
+		}
+		c.DiskPressureTargetFreeBytes = n
+	}
+
 	return c, nil
+}
+
+func parseBytes(s string) (int64, error) {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return 0, errors.New("empty value")
+	}
+	s = strings.TrimSuffix(s, "i")
+	s = strings.TrimSuffix(s, "I")
+	if s == "" {
+		return 0, fmt.Errorf("invalid byte size %q", s)
+	}
+	suffix := s[len(s)-1]
+	var mul int64 = 1
+	digits := s
+	switch suffix {
+	case 'K', 'k':
+		mul = 1 << 10
+		digits = s[:len(s)-1]
+	case 'M', 'm':
+		mul = 1 << 20
+		digits = s[:len(s)-1]
+	case 'G', 'g':
+		mul = 1 << 30
+		digits = s[:len(s)-1]
+	case 'T', 't':
+		mul = 1 << 40
+		digits = s[:len(s)-1]
+	}
+	n, err := strconv.ParseInt(strings.TrimSpace(digits), 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("invalid byte size %q: %w", s, err)
+	}
+	if n < 0 {
+		return 0, fmt.Errorf("byte size must be >= 0, got %d", n)
+	}
+	return n * mul, nil
 }
 
 func parseBool(v string) bool {

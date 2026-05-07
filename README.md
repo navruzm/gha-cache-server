@@ -56,6 +56,8 @@ Setup recipes for systemd, Docker, and actions-runner-controller live in `runner
 | `DB_MYSQL_HOST/PORT/DATABASE/USER/PASSWORD` | | mysql |
 | `CACHE_CLEANUP_OLDER_THAN_DAYS` | `90` | |
 | `DISABLE_CLEANUP_JOBS` | `false` | |
+| `DISK_PRESSURE_MIN_FREE_BYTES` | unset | filesystem only — start LRU eviction below this (e.g. `2Gi`) |
+| `DISK_PRESSURE_TARGET_FREE_BYTES` | unset | stop evicting above this (e.g. `4Gi`) |
 | `ENABLE_DIRECT_DOWNLOADS` | `false` | use presigned URLs |
 | `SKIP_TOKEN_VALIDATION` | `false` | dev only |
 | `MANAGEMENT_API_KEY` | | enables `/management-api/*` |

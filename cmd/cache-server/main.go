@@ -69,6 +69,7 @@ func main() {
 	taskDeps := tasks.Deps{Cfg: cfg, Queries: q, Storage: svc}
 	scheduler := cron.New().WithLogger(logger)
 	scheduler.Every(5*time.Minute, "cleanup:uploads", tasks.CleanupUploads(taskDeps))
+	scheduler.Every(5*time.Minute, "cleanup:disk-pressure", tasks.CleanupDiskPressure(taskDeps))
 	scheduler.Every(time.Hour, "cleanup:parts", tasks.CleanupParts(taskDeps))
 	scheduler.Every(time.Hour, "cleanup:merges", tasks.CleanupMerges(taskDeps))
 	scheduler.Every(24*time.Hour, "cleanup:cache-entries", tasks.CleanupCacheEntries(taskDeps))

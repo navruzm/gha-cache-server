@@ -16,6 +16,9 @@ config:
   cacheCleanupOlderThanDays: 90
   managementApiKey: ""
 
+  diskPressureMinFreeBytes: "2Gi"
+  diskPressureTargetFreeBytes: "4Gi"
+
   storage:
     driver: filesystem
     filesystem:

@@ -21,6 +21,14 @@ Every upload gets a numeric folder. Each chunk lands at `<folder>/parts/<index>`
 
 A small state machine in `storage_locations` tracks `mergeStartedAt`/`mergedAt`/`partsDeletedAt`. Cleanup tasks reset stalled merges, drop orphaned locations, and prune entries older than `CACHE_CLEANUP_OLDER_THAN_DAYS`.
 
+## Disk-pressure eviction
+
+When the filesystem driver is in use, a `cleanup:disk-pressure` task runs every 5 minutes and consults `syscall.Statfs` for available bytes on the storage root. If free space is below `DISK_PRESSURE_MIN_FREE_BYTES`, the server evicts cache entries by **least-recently-used** (`COALESCE(lastDownloadedAt, updatedAt) ASC`) until free space climbs back above `DISK_PRESSURE_TARGET_FREE_BYTES`. Entries whose merge is in flight are skipped so an active download is never yanked mid-stream.
+
+The Helm chart sets sensible defaults (`2Gi` / `4Gi`); override via `config.diskPressureMinFreeBytes` and `config.diskPressureTargetFreeBytes`. Set either to `0` (or unset env) to disable the task entirely.
+
+S3 and GCS backends don't have a "disk full" concept — capacity there is bounded by your cloud quota, not by ephemeral disk — so the disk-pressure task no-ops on them.
+
 ## Authentication
 
 Each runner request carries a JWT issued by `https://token.actions.githubusercontent.com`. The server fetches that issuer's JWKS, caches it for 10 minutes, and verifies signatures (RS256, ES256). Two custom claims are extracted:

@@ -96,6 +96,14 @@ false
 - name: MANAGEMENT_API_KEY
   value: {{ .Values.config.managementApiKey | quote }}
 {{- end }}
+{{- with .Values.config.diskPressureMinFreeBytes }}
+- name: DISK_PRESSURE_MIN_FREE_BYTES
+  value: {{ . | quote }}
+{{- end }}
+{{- with .Values.config.diskPressureTargetFreeBytes }}
+- name: DISK_PRESSURE_TARGET_FREE_BYTES
+  value: {{ . | quote }}
+{{- end }}
 - name: STORAGE_DRIVER
   value: {{ .Values.config.storage.driver | quote }}
 {{- if eq .Values.config.storage.driver "filesystem" }}

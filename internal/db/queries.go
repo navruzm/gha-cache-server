@@ -408,3 +408,31 @@ func (q *Queries) DeleteCacheEntries(ctx context.Context, f CacheEntryFilter) (i
 	}
 	return res.RowsAffected()
 }
+
+type LRUCacheEntry struct {
+	EntryID    string
+	LocationID string
+	FolderName string
+}
+
+func (q *Queries) ListLRUCacheEntries(ctx context.Context, limit int) ([]LRUCacheEntry, error) {
+	stmt := fmt.Sprintf(`SELECT c.id, s.id, s.folderName
+		FROM cache_entries c JOIN storage_locations s ON s.id = c.locationId
+		WHERE NOT (s.mergeStartedAt IS NOT NULL AND s.mergedAt IS NULL)
+		ORDER BY COALESCE(s.lastDownloadedAt, c.updatedAt) ASC
+		LIMIT %s`, q.ph(1))
+	rows, err := q.d.QueryContext(ctx, stmt, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []LRUCacheEntry
+	for rows.Next() {
+		var e LRUCacheEntry
+		if err := rows.Scan(&e.EntryID, &e.LocationID, &e.FolderName); err != nil {
+			return nil, err
+		}
+		out = append(out, e)
+	}
+	return out, rows.Err()
+}

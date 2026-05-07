@@ -54,6 +54,8 @@ The official GitHub runner overwrites `ACTIONS_RESULTS_URL` with GitHub's endpoi
 | `DB_DRIVER` | `sqlite` | `sqlite` \| `postgres` \| `mysql` |
 | `PORT` | `3000` | Listen port |
 | `CACHE_CLEANUP_OLDER_THAN_DAYS` | `90` | 0 disables age-based cleanup |
+| `DISK_PRESSURE_MIN_FREE_BYTES` | unset | Filesystem only. Start LRU eviction when free space drops below this (e.g. `2Gi`) |
+| `DISK_PRESSURE_TARGET_FREE_BYTES` | unset | Stop evicting once free space reaches this (e.g. `4Gi`). Hysteresis prevents flapping. |
 | `ENABLE_DIRECT_DOWNLOADS` | `false` | Hand the runner a presigned URL |
 | `MANAGEMENT_API_KEY` | _unset_ | Enables `/management-api` when set |
 | `SKIP_TOKEN_VALIDATION` | `false` | Dev only — disables JWT verification |

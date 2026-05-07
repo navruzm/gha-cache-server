@@ -379,6 +379,18 @@ func (s *Service) Q() *dbpkg.DB {
 	return s.q.DB()
 }
 
+func (s *Service) UsableFreeBytes() (int64, bool, error) {
+	r, ok := s.adapter.(DiskUsageReporter)
+	if !ok {
+		return 0, false, nil
+	}
+	n, err := r.UsableFreeBytes()
+	if err != nil {
+		return 0, true, err
+	}
+	return n, true, nil
+}
+
 func (s *Service) OpenMergedSeekable(ctx context.Context, cacheEntryID string) (io.ReadSeekCloser, time.Time, error) {
 	_, loc, err := s.q.FindCacheEntryWithLocation(ctx, cacheEntryID)
 	if err != nil {
