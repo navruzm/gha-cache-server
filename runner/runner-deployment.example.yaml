@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cache-redirect
+  namespace: arc-runners
+data:
+  preload.js: |
+    'use strict'
+    if (process.env.OVERRIDE_ACTIONS_RESULTS_URL) {
+      process.env.ACTIONS_RESULTS_URL = process.env.OVERRIDE_ACTIONS_RESULTS_URL
+    }
+---
+apiVersion: actions.github.com/v1alpha1
+kind: AutoscalingRunnerSet
+metadata:
+  name: my-runners
+  namespace: arc-runners
+spec:
+  githubConfigUrl: https://github.com/<org>/<repo>
+  githubConfigSecret: github-app-secret
+  minRunners: 0
+  maxRunners: 10
+  template:
+    spec:
+      containers:
+        - name: runner
+          image: ghcr.io/actions/actions-runner:latest
+          command: ["/home/runner/run.sh"]
+          env:
+            - name: NODE_OPTIONS
+              value: --require=/opt/cache-redirect.js
+            - name: OVERRIDE_ACTIONS_RESULTS_URL
+              value: http://cache-server.cache-system.svc.cluster.local:3000/
+            - name: ACTIONS_CACHE_SERVICE_V2
+              value: "true"
+          volumeMounts:
+            - name: cache-redirect
+              mountPath: /opt/cache-redirect.js
+              subPath: preload.js
+              readOnly: true
+      volumes:
+        - name: cache-redirect
+          configMap:
+            name: cache-redirect
+            defaultMode: 0444

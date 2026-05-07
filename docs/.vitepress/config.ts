@@ -14,6 +14,7 @@ export default defineConfig({
         items: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'How it works', link: '/how-it-works' },
+          { text: 'Runner Setup', link: '/runner-setup' },
           { text: 'Helm Chart', link: '/helm' },
           { text: 'Management API', link: '/management-api' },
         ],

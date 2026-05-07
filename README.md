@@ -21,13 +21,17 @@ services:
 volumes: { cache-data: }
 ```
 
-In your workflow:
+### Pointing runners at the server
 
-```yaml
-env:
-  ACTIONS_CACHE_URL: http://localhost:3000/
-  ACTIONS_RESULTS_URL: http://localhost:3000/
+The runner overwrites `ACTIONS_RESULTS_URL` per-step from GitHub's signed job message, so a workflow-level `env:` doesn't stick. Use the Node.js preload in `runner/preload.js` plus three env vars on the runner host:
+
 ```
+NODE_OPTIONS=--require=/opt/cache-redirect.js
+OVERRIDE_ACTIONS_RESULTS_URL=http://localhost:3000/
+ACTIONS_CACHE_SERVICE_V2=true
+```
+
+Setup recipes for systemd, Docker, and actions-runner-controller live in `runner/` and are documented in `docs/runner-setup.md`.
 
 ## Configuration
 
