@@ -11,5 +11,6 @@ file="${2:-CHANGELOG.md}"
 awk -v ver="$version" '
   $0 ~ "^## \\[" ver "\\]" { found = 1; next }
   found && /^## \[/        { exit }
-  found                    { print }
+  found && !started && NF  { started = 1 }
+  started                  { print }
 ' "$file"
