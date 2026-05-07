@@ -28,9 +28,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          cache: npm
-          cache-dependency-path: docs/package-lock.json
-      - run: npm ci || npm install
+      - run: npm install
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
