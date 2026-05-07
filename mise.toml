@@ -68,20 +68,12 @@ description = "Print the CHANGELOG section for a version (e.g. mise run release-
 run = "./scripts/changelog-section.sh"
 
 [tasks.helm-package]
-description = "Package the helm chart with appVersion/version synced to a release tag (e.g. mise run helm-package -- 0.1.0)"
-run = '''
-set -euo pipefail
-VERSION="${1:?version required, e.g. 0.1.0}"
-CHART_DIR=charts/gha-cache-server
-sed -i -E "s/^appVersion:.*$/appVersion: \"$VERSION\"/" "$CHART_DIR/Chart.yaml"
-sed -i -E "s/^version:.*$/version: $VERSION/" "$CHART_DIR/Chart.yaml"
-helm package "$CHART_DIR" --destination packaged
-'''
+description = "Package the helm chart (workflow syncs Chart.yaml version before calling)"
+run = "helm package charts/gha-cache-server --destination packaged"
 
 [tasks.helm-push]
 description = "Push every packaged chart to HELM_OCI_REGISTRY (login expected to be done already)"
 run = '''
-set -euo pipefail
 : "${HELM_OCI_REGISTRY:?HELM_OCI_REGISTRY required, e.g. oci://ghcr.io/owner/charts}"
 for pkg in packaged/*.tgz; do
   helm push "$pkg" "$HELM_OCI_REGISTRY"
@@ -89,9 +81,8 @@ done
 '''
 
 [tasks.release-binaries]
-description = "Run goreleaser. RELEASE_NOTES_FILE may point at a notes file."
+description = "Run goreleaser. Set RELEASE_NOTES_FILE to use a notes file."
 run = '''
-set -euo pipefail
 if [ -n "${RELEASE_NOTES_FILE:-}" ]; then
   goreleaser release --clean --release-notes="$RELEASE_NOTES_FILE"
 else

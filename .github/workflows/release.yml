@@ -57,21 +57,17 @@ jobs:
         with:
           fetch-depth: 0
       - uses: jdx/mise-action@v2
-      - name: Extract release notes from CHANGELOG
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          NOTES_FILE="$RUNNER_TEMP/release-notes.md"
-          mise run release-notes -- "$VERSION" > "$NOTES_FILE"
-          if [ ! -s "$NOTES_FILE" ]; then
-            echo "::error::no CHANGELOG.md section for $VERSION"
-            exit 1
-          fi
-          echo "RELEASE_NOTES_FILE=$NOTES_FILE" >> "$GITHUB_ENV"
-          echo "--- $NOTES_FILE ---"
-          cat "$NOTES_FILE"
-      - run: mise run release-binaries
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES="$RUNNER_TEMP/release-notes.md"
+          mise run release-notes -- "$VERSION" > "$NOTES"
+          test -s "$NOTES" || { echo "::error::no CHANGELOG.md section for $VERSION"; exit 1; }
+          echo "--- $NOTES ---"; cat "$NOTES"
+          RELEASE_NOTES_FILE="$NOTES" mise run release-binaries
 
   publish-chart:
     name: Publish Helm chart
@@ -80,10 +76,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: jdx/mise-action@v2
-      - name: Package chart with version synced to tag
+      - name: Sync Chart.yaml version to tag and package
         run: |
+          set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
-          mise run helm-package -- "$VERSION"
+          sed -i -E "s/^appVersion:.*$/appVersion: \"$VERSION\"/" charts/gha-cache-server/Chart.yaml
+          sed -i -E "s/^version:.*$/version: $VERSION/" charts/gha-cache-server/Chart.yaml
+          mise run helm-package
       - name: Login to GHCR (Helm OCI)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io -u "${{ github.actor }}" --password-stdin
       - name: Push chart
