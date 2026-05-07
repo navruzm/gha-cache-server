@@ -8,4 +8,5 @@ coverage.txt
 .vscode/
 tests/temp/
 CLAUDE.md
+/benchmark/
 

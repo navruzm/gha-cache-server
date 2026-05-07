@@ -1,0 +1,104 @@
+# Tool versions used by both local dev and CI. Bump versions here — workflows
+# install whatever mise resolves at the pinned versions.
+[tools]
+go = "1.25"
+node = "lts"
+helm = "3.16.1"
+golangci-lint = "2.12.2"
+goreleaser = "2.15.4"
+
+# All tasks runnable via `mise run <name>`. CI mirrors these, so the local
+# command and the CI command are always the same.
+
+[tasks.fmt-check]
+description = "Fail if any Go file is not gofmt-clean"
+run = '''
+fmt=$(gofmt -l .)
+if [ -n "$fmt" ]; then
+  echo "unformatted:"
+  echo "$fmt"
+  exit 1
+fi
+'''
+
+[tasks.vet]
+description = "go vet ./..."
+run = "go vet ./..."
+
+[tasks.golangci-lint]
+description = "golangci-lint run ./..."
+run = "golangci-lint run ./..."
+
+[tasks.lint]
+description = "Run all Go linters (vet + gofmt-check + golangci-lint)"
+depends = ["vet", "fmt-check", "golangci-lint"]
+
+[tasks.test]
+description = "Unit + e2e tests with race detector and coverage"
+run = "go test -race -coverprofile=coverage.out ./..."
+
+[tasks.test-integration]
+description = "Integration tests (requires Docker for testcontainers)"
+run = "go test -race -tags=integration -timeout=15m ./..."
+
+[tasks.build]
+description = "Build the cache-server binary"
+run = 'CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o cache-server ./cmd/cache-server'
+
+[tasks.helm-lint]
+description = "Lint the helm chart and render every CI value file"
+run = '''
+helm lint install/kubernetes/gha-cache-server
+for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
+  echo "=== $f ==="
+  helm template test install/kubernetes/gha-cache-server -f "$f" > /dev/null
+done
+'''
+
+[tasks.docs-build]
+description = "Build the VitePress site"
+dir = "{{config_root}}/docs"
+run = '''
+npm install
+npm run build
+'''
+
+[tasks.release-notes]
+description = "Print the CHANGELOG section for a version (e.g. mise run release-notes -- 0.1.0)"
+run = "./scripts/changelog-section.sh"
+
+[tasks.helm-package]
+description = "Package the helm chart with appVersion/version synced to a release tag (e.g. mise run helm-package -- 0.1.0)"
+run = '''
+set -euo pipefail
+VERSION="${1:?version required, e.g. 0.1.0}"
+CHART_DIR=install/kubernetes/gha-cache-server
+sed -i -E "s/^appVersion:.*$/appVersion: \"$VERSION\"/" "$CHART_DIR/Chart.yaml"
+sed -i -E "s/^version:.*$/version: $VERSION/" "$CHART_DIR/Chart.yaml"
+helm package "$CHART_DIR" --destination packaged
+'''
+
+[tasks.helm-push]
+description = "Push every packaged chart to HELM_OCI_REGISTRY (login expected to be done already)"
+run = '''
+set -euo pipefail
+: "${HELM_OCI_REGISTRY:?HELM_OCI_REGISTRY required, e.g. oci://ghcr.io/owner/charts}"
+for pkg in packaged/*.tgz; do
+  helm push "$pkg" "$HELM_OCI_REGISTRY"
+done
+'''
+
+[tasks.release-binaries]
+description = "Run goreleaser. RELEASE_NOTES_FILE may point at a notes file."
+run = '''
+set -euo pipefail
+if [ -n "${RELEASE_NOTES_FILE:-}" ]; then
+  goreleaser release --clean --release-notes="$RELEASE_NOTES_FILE"
+else
+  goreleaser release --clean
+fi
+'''
+
+[tasks.ci]
+description = "Run everything CI runs locally (lint + test + build + helm-lint)"
+depends = ["lint", "test", "build", "helm-lint"]
