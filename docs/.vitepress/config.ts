@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/gha-cache-server/',
   title: 'GHA Cache Server',
   description: 'Self-hosted GitHub Actions cache server. Drop-in compatible with actions/cache@v4 and @v5.',
   cleanUrls: true,
