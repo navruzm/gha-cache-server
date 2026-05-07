@@ -29,7 +29,7 @@ jobs:
           if [ -n "$fmt" ]; then echo "unformatted:"; echo "$fmt"; exit 1; fi
       - uses: golangci/golangci-lint-action@v8
         with:
-          version: latest
+          version: v2.12.2
 
   test-unit:
     name: Unit tests
