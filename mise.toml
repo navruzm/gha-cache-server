@@ -81,14 +81,8 @@ done
 '''
 
 [tasks.release-binaries]
-description = "Run goreleaser. Set RELEASE_NOTES_FILE to use a notes file."
-run = '''
-if [ -n "${RELEASE_NOTES_FILE:-}" ]; then
-  goreleaser release --clean --release-notes="$RELEASE_NOTES_FILE"
-else
-  goreleaser release --clean
-fi
-'''
+description = "Run goreleaser snapshot/release locally. CI calls goreleaser directly via mise exec."
+run = "goreleaser release --clean"
 
 [tasks.ci]
 description = "Run everything CI runs locally (lint + test + build + helm-lint)"

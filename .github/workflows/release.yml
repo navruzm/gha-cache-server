@@ -64,10 +64,10 @@ jobs:
           set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
           NOTES="$RUNNER_TEMP/release-notes.md"
-          mise run release-notes -- "$VERSION" > "$NOTES"
+          ./scripts/changelog-section.sh "$VERSION" > "$NOTES"
           test -s "$NOTES" || { echo "::error::no CHANGELOG.md section for $VERSION"; exit 1; }
-          echo "--- $NOTES ---"; cat "$NOTES"
-          RELEASE_NOTES_FILE="$NOTES" mise run release-binaries
+          echo "--- $NOTES ---"; cat "$NOTES"; echo "---"
+          mise exec -- goreleaser release --clean --release-notes "$NOTES"
 
   publish-chart:
     name: Publish Helm chart
