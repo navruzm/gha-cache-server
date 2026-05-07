@@ -72,6 +72,10 @@ Setup recipes for systemd, Docker, and actions-runner-controller live in `runner
 - `internal/cron` — interval scheduler
 - `internal/tasks` — five cleanup tasks
 
+## Releases
+
+Tag-driven. See [`RELEASING.md`](RELEASING.md). Release notes come from `CHANGELOG.md` (Keep a Changelog format).
+
 ## License
 
 MIT

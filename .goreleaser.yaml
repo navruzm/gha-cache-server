@@ -31,12 +31,7 @@ snapshot:
   version_template: '{{ incpatch .Version }}-next'
 
 changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
-      - '^chore:'
+  disable: true
 
 release:
   draft: false
