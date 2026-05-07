@@ -4,13 +4,13 @@ title: Helm Chart
 
 # Helm Chart
 
-The chart lives at `install/kubernetes/github-actions-cache-server` in the repo and is published to `oci://ghcr.io/navruzm/charts/github-actions-cache-server`.
+The chart lives at `install/kubernetes/gha-cache-server` in the repo and is published to `oci://ghcr.io/navruzm/charts/gha-cache-server`.
 
 ## Install
 
 ```bash
 helm install cache-server \
-  oci://ghcr.io/navruzm/charts/github-actions-cache-server \
+  oci://ghcr.io/navruzm/charts/gha-cache-server \
   -f my-values.yaml
 ```
 

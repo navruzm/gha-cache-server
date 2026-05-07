@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	dbpkg "github.com/navruzm/github-actions-cache-server-go/internal/db"
+	dbpkg "github.com/navruzm/gha-cache-server/internal/db"
 	_ "modernc.org/sqlite"
 )
 

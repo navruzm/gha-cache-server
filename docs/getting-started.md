@@ -12,7 +12,7 @@ The cache server is shipped as a Docker image and a Helm chart. The simplest dep
 ```yaml
 services:
   cache-server:
-    image: ghcr.io/navruzm/github-actions-cache-server-go:latest
+    image: ghcr.io/navruzm/gha-cache-server:latest
     ports:
       - '3000:3000'
     environment:
@@ -34,7 +34,7 @@ Requires Helm 3.8+ for OCI registries.
 
 ```bash
 helm install cache-server \
-  oci://ghcr.io/navruzm/charts/github-actions-cache-server
+  oci://ghcr.io/navruzm/charts/gha-cache-server
 ```
 
 Customise via `values.yaml` (see [Helm Chart](/helm) for the full surface).

@@ -3,8 +3,8 @@ package server
 import (
 	"strconv"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/auth"
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/auth"
+	"github.com/navruzm/gha-cache-server/internal/storage"
 )
 
 func strconvFormatInt(n int64) string { return strconv.FormatInt(n, 10) }

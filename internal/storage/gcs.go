@@ -19,7 +19,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/config"
 )
 
 type GCSAdapter struct {

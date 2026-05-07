@@ -10,14 +10,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/auth"
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
-	"github.com/navruzm/github-actions-cache-server-go/internal/cron"
-	dbpkg "github.com/navruzm/github-actions-cache-server-go/internal/db"
-	"github.com/navruzm/github-actions-cache-server-go/internal/logging"
-	"github.com/navruzm/github-actions-cache-server-go/internal/server"
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
-	"github.com/navruzm/github-actions-cache-server-go/internal/tasks"
+	"github.com/navruzm/gha-cache-server/internal/auth"
+	"github.com/navruzm/gha-cache-server/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/cron"
+	dbpkg "github.com/navruzm/gha-cache-server/internal/db"
+	"github.com/navruzm/gha-cache-server/internal/logging"
+	"github.com/navruzm/gha-cache-server/internal/server"
+	"github.com/navruzm/gha-cache-server/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/tasks"
 )
 
 func main() {

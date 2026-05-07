@@ -1,4 +1,4 @@
-module github.com/navruzm/github-actions-cache-server-go
+module github.com/navruzm/gha-cache-server
 
 go 1.26.1
 

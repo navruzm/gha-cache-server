@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/auth"
+	"github.com/navruzm/gha-cache-server/internal/auth"
 )
 
 const twirpPrefix = "/twirp/github.actions.results.api.v1.CacheService"

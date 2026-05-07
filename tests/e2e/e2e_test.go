@@ -15,12 +15,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/auth"
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
-	dbpkg "github.com/navruzm/github-actions-cache-server-go/internal/db"
-	"github.com/navruzm/github-actions-cache-server-go/internal/logging"
-	"github.com/navruzm/github-actions-cache-server-go/internal/server"
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/auth"
+	"github.com/navruzm/gha-cache-server/internal/config"
+	dbpkg "github.com/navruzm/gha-cache-server/internal/db"
+	"github.com/navruzm/gha-cache-server/internal/logging"
+	"github.com/navruzm/gha-cache-server/internal/server"
+	"github.com/navruzm/gha-cache-server/internal/storage"
 	_ "modernc.org/sqlite"
 )
 

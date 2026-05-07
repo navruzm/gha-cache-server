@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
-	"github.com/navruzm/github-actions-cache-server-go/internal/logging"
+	"github.com/navruzm/gha-cache-server/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/logging"
 )
 
 func TestHealth(t *testing.T) {

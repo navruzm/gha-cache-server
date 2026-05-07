@@ -19,7 +19,7 @@ Driver value: `gcs`.
 ```yaml
 services:
   cache-server:
-    image: ghcr.io/navruzm/github-actions-cache-server-go:latest
+    image: ghcr.io/navruzm/gha-cache-server:latest
     ports: ['3000:3000']
     environment:
       API_BASE_URL: http://localhost:3000

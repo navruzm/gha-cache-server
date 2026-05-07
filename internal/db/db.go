@@ -11,7 +11,7 @@ import (
 	_ "github.com/lib/pq"
 	_ "modernc.org/sqlite"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/config"
 )
 
 type Driver string

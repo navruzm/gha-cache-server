@@ -6980,19 +6980,19 @@ git commit -m "feat(server): OpenAPI spec + Swagger UI at /management-api/_docs"
 
 ## Phase 22 — Helm Chart
 
-Mirror the upstream chart at `install/kubernetes/github-actions-cache-server/`. License: MIT (upstream); attribution noted in chart annotations.
+Mirror the upstream chart at `install/kubernetes/gha-cache-server/`. License: MIT (upstream); attribution noted in chart annotations.
 
 ### Task 22.1: `Chart.yaml` + `.helmignore`
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/Chart.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/.helmignore`
+- Create: `install/kubernetes/gha-cache-server/Chart.yaml`
+- Create: `install/kubernetes/gha-cache-server/.helmignore`
 
 - [ ] **Step 1: Write `Chart.yaml`**
 
 ```yaml
 apiVersion: v2
-name: github-actions-cache-server
+name: gha-cache-server
 description: Self-hosted GitHub Actions cache server (Go port)
 type: application
 version: 0.1.0
@@ -7033,7 +7033,7 @@ annotations:
 - [ ] **Step 3: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/Chart.yaml install/kubernetes/github-actions-cache-server/.helmignore
+git add install/kubernetes/gha-cache-server/Chart.yaml install/kubernetes/gha-cache-server/.helmignore
 git commit -m "chore(helm): chart metadata and helmignore"
 ```
 
@@ -7044,7 +7044,7 @@ git commit -m "chore(helm): chart metadata and helmignore"
 This is the user-facing configuration surface. Mirrors upstream keys 1:1 so existing operators can switch image and continue with their existing `values.yaml`.
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/values.yaml`
+- Create: `install/kubernetes/gha-cache-server/values.yaml`
 
 - [ ] **Step 1: Write the file**
 
@@ -7165,7 +7165,7 @@ extraVolumeMounts: []
 - [ ] **Step 2: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/values.yaml
+git add install/kubernetes/gha-cache-server/values.yaml
 git commit -m "chore(helm): values.yaml with same surface as upstream"
 ```
 
@@ -7174,7 +7174,7 @@ git commit -m "chore(helm): values.yaml with same surface as upstream"
 ### Task 22.3: `_helpers.tpl`
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/templates/_helpers.tpl`
+- Create: `install/kubernetes/gha-cache-server/templates/_helpers.tpl`
 
 - [ ] **Step 1: Write the file**
 
@@ -7328,7 +7328,7 @@ false
 - [ ] **Step 2: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/templates/_helpers.tpl
+git add install/kubernetes/gha-cache-server/templates/_helpers.tpl
 git commit -m "chore(helm): _helpers.tpl with naming + env-block builders"
 ```
 
@@ -7337,7 +7337,7 @@ git commit -m "chore(helm): _helpers.tpl with naming + env-block builders"
 ### Task 22.4: `deployment.yaml`
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/templates/deployment.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/deployment.yaml`
 
 - [ ] **Step 1: Write the file**
 
@@ -7427,7 +7427,7 @@ spec:
 - [ ] **Step 2: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/templates/deployment.yaml
+git add install/kubernetes/gha-cache-server/templates/deployment.yaml
 git commit -m "chore(helm): Deployment template"
 ```
 
@@ -7436,9 +7436,9 @@ git commit -m "chore(helm): Deployment template"
 ### Task 22.5: `service.yaml`, `serviceaccount.yaml`, `ingress.yaml`
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/templates/service.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/templates/serviceaccount.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/templates/ingress.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/service.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/serviceaccount.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/ingress.yaml`
 
 - [ ] **Step 1: `service.yaml`**
 
@@ -7529,7 +7529,7 @@ spec:
 - [ ] **Step 4: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/templates/{service,serviceaccount,ingress}.yaml
+git add install/kubernetes/gha-cache-server/templates/{service,serviceaccount,ingress}.yaml
 git commit -m "chore(helm): Service, ServiceAccount, Ingress templates"
 ```
 
@@ -7538,10 +7538,10 @@ git commit -m "chore(helm): Service, ServiceAccount, Ingress templates"
 ### Task 22.6: `persistentvolumeclaim.yaml`, `hpa.yaml`, `NOTES.txt`, `tests/test-connection.yaml`
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/templates/persistentvolumeclaim.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/templates/hpa.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/templates/NOTES.txt`
-- Create: `install/kubernetes/github-actions-cache-server/templates/tests/test-connection.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/persistentvolumeclaim.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/hpa.yaml`
+- Create: `install/kubernetes/gha-cache-server/templates/NOTES.txt`
+- Create: `install/kubernetes/gha-cache-server/templates/tests/test-connection.yaml`
 
 - [ ] **Step 1: `persistentvolumeclaim.yaml`**
 
@@ -7650,10 +7650,10 @@ spec:
 - [ ] **Step 5: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/templates/persistentvolumeclaim.yaml \
-        install/kubernetes/github-actions-cache-server/templates/hpa.yaml \
-        install/kubernetes/github-actions-cache-server/templates/NOTES.txt \
-        install/kubernetes/github-actions-cache-server/templates/tests/test-connection.yaml
+git add install/kubernetes/gha-cache-server/templates/persistentvolumeclaim.yaml \
+        install/kubernetes/gha-cache-server/templates/hpa.yaml \
+        install/kubernetes/gha-cache-server/templates/NOTES.txt \
+        install/kubernetes/gha-cache-server/templates/tests/test-connection.yaml
 git commit -m "chore(helm): PVC, HPA, NOTES, test-connection"
 ```
 
@@ -7662,9 +7662,9 @@ git commit -m "chore(helm): PVC, HPA, NOTES, test-connection"
 ### Task 22.7: Helm lint and template smoke tests
 
 **Files:**
-- Create: `install/kubernetes/github-actions-cache-server/ci/sqlite-fs-values.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/ci/postgres-s3-values.yaml`
-- Create: `install/kubernetes/github-actions-cache-server/ci/autoscaling-values.yaml`
+- Create: `install/kubernetes/gha-cache-server/ci/sqlite-fs-values.yaml`
+- Create: `install/kubernetes/gha-cache-server/ci/postgres-s3-values.yaml`
+- Create: `install/kubernetes/gha-cache-server/ci/autoscaling-values.yaml`
 
 These small fixture files exercise different code paths. They keep `helm lint` strict.
 
@@ -7717,9 +7717,9 @@ config:
 - [ ] **Step 4: Run lint and template renders locally**
 
 ```bash
-helm lint install/kubernetes/github-actions-cache-server
-for f in install/kubernetes/github-actions-cache-server/ci/*.yaml; do
-  helm template test-release install/kubernetes/github-actions-cache-server -f "$f" >/dev/null
+helm lint install/kubernetes/gha-cache-server
+for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
+  helm template test-release install/kubernetes/gha-cache-server -f "$f" >/dev/null
 done
 ```
 
@@ -7728,7 +7728,7 @@ Expected: no errors.
 - [ ] **Step 5: Verify the SQLite + multi-replica failure path**
 
 ```bash
-helm template test install/kubernetes/github-actions-cache-server \
+helm template test install/kubernetes/gha-cache-server \
   --set replicaCount=3 --set config.db.driver=sqlite 2>&1 | grep -i "SQLite cannot be used"
 ```
 
@@ -7737,7 +7737,7 @@ Expected: error containing "SQLite cannot be used".
 - [ ] **Step 6: Commit**
 
 ```bash
-git add install/kubernetes/github-actions-cache-server/ci
+git add install/kubernetes/gha-cache-server/ci
 git commit -m "test(helm): CI value files for lint matrix"
 ```
 
@@ -7846,12 +7846,12 @@ jobs:
       - uses: azure/setup-helm@v4
         with:
           version: v3.16.1
-      - run: helm lint install/kubernetes/github-actions-cache-server
+      - run: helm lint install/kubernetes/gha-cache-server
       - name: Template all CI value files
         run: |
-          for f in install/kubernetes/github-actions-cache-server/ci/*.yaml; do
+          for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
             echo "=== $f ==="
-            helm template test install/kubernetes/github-actions-cache-server -f "$f" > /dev/null
+            helm template test install/kubernetes/gha-cache-server -f "$f" > /dev/null
           done
 ```
 
@@ -7945,7 +7945,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-image]
     env:
-      CHART_DIR: install/kubernetes/github-actions-cache-server
+      CHART_DIR: install/kubernetes/gha-cache-server
     steps:
       - uses: actions/checkout@v4
       - uses: azure/setup-helm@v4
@@ -8260,7 +8260,7 @@ Requires Helm 3.8+ for OCI registries.
 
 ```bash
 helm install cache-server \
-  oci://ghcr.io/falcondev-oss/charts/github-actions-cache-server
+  oci://ghcr.io/falcondev-oss/charts/gha-cache-server
 ```
 
 Customise via `values.yaml` (see [Helm Chart](/helm) for the full surface).
@@ -8332,13 +8332,13 @@ title: Helm Chart
 
 # Helm Chart
 
-The chart lives at `install/kubernetes/github-actions-cache-server` in the repo and is published to `oci://ghcr.io/falcondev-oss/charts/github-actions-cache-server`.
+The chart lives at `install/kubernetes/gha-cache-server` in the repo and is published to `oci://ghcr.io/falcondev-oss/charts/gha-cache-server`.
 
 ## Install
 
 ```bash
 helm install cache-server \
-  oci://ghcr.io/falcondev-oss/charts/github-actions-cache-server \
+  oci://ghcr.io/falcondev-oss/charts/gha-cache-server \
   -f my-values.yaml
 ```
 
@@ -8736,7 +8736,7 @@ Expected file set includes:
 - `tests/e2e/e2e_test.go`
 - `Dockerfile`, `docker-compose.yml`, `go.mod`, `go.sum`, `.goreleaser.yaml`
 - `.github/workflows/{ci,release,docs}.yml`
-- `install/kubernetes/github-actions-cache-server/{Chart.yaml,values.yaml,.helmignore,templates/*,ci/*}`
+- `install/kubernetes/gha-cache-server/{Chart.yaml,values.yaml,.helmignore,templates/*,ci/*}`
 - `docs/{package.json,index.md,getting-started.md,how-it-works.md,helm.md,management-api.md,storage-drivers/*.md,database-drivers/*.md,.vitepress/config.ts}`
 - `README.md`
 
@@ -8747,9 +8747,9 @@ go vet ./...
 gofmt -l .
 go test -race ./...
 go test -race -tags=integration ./... || true   # SKIPs without docker
-helm lint install/kubernetes/github-actions-cache-server
-for f in install/kubernetes/github-actions-cache-server/ci/*.yaml; do
-  helm template release install/kubernetes/github-actions-cache-server -f "$f" > /dev/null
+helm lint install/kubernetes/gha-cache-server
+for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
+  helm template release install/kubernetes/gha-cache-server -f "$f" > /dev/null
 done
 CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o cache-server ./cmd/cache-server
 ls -lh cache-server

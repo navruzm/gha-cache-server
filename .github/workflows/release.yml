@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-image]
     env:
-      CHART_DIR: install/kubernetes/github-actions-cache-server
+      CHART_DIR: install/kubernetes/gha-cache-server
     steps:
       - uses: actions/checkout@v4
       - uses: azure/setup-helm@v4

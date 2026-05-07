@@ -6,7 +6,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/storage"
 )
 
 type fakeFreeReporter struct {

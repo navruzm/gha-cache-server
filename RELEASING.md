@@ -21,7 +21,7 @@ On `v*` tag push, `.github/workflows/release.yml` runs three jobs in parallel-is
 
 - **build-image** — multi-arch (`linux/amd64`, `linux/arm64`) Docker image to `ghcr.io/<owner>/<repo>` with semver, branch, and `latest` tags.
 - **release-binaries** — Linux/macOS/Windows × amd64/arm64 archives via goreleaser; release notes are extracted from `CHANGELOG.md` by `scripts/changelog-section.sh`.
-- **publish-chart** — the Helm chart in `install/kubernetes/github-actions-cache-server` is repackaged with `Chart.yaml` `appVersion` and `version` synced to the release tag, then pushed to `oci://ghcr.io/<owner>/charts`.
+- **publish-chart** — the Helm chart in `install/kubernetes/gha-cache-server` is repackaged with `Chart.yaml` `appVersion` and `version` synced to the release tag, then pushed to `oci://ghcr.io/<owner>/charts`.
 
 ## Commit messages
 

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	dbpkg "github.com/navruzm/github-actions-cache-server-go/internal/db"
-	"github.com/navruzm/github-actions-cache-server-go/internal/ids"
+	dbpkg "github.com/navruzm/gha-cache-server/internal/db"
+	"github.com/navruzm/gha-cache-server/internal/ids"
 )
 
 type ServiceConfig struct {

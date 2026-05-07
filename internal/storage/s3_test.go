@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/config"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )

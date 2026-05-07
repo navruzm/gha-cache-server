@@ -91,10 +91,10 @@ jobs:
       - uses: azure/setup-helm@v4
         with:
           version: v3.16.1
-      - run: helm lint install/kubernetes/github-actions-cache-server
+      - run: helm lint install/kubernetes/gha-cache-server
       - name: Template all CI value files
         run: |
-          for f in install/kubernetes/github-actions-cache-server/ci/*.yaml; do
+          for f in install/kubernetes/gha-cache-server/ci/*.yaml; do
             echo "=== $f ==="
-            helm template test install/kubernetes/github-actions-cache-server -f "$f" > /dev/null
+            helm template test install/kubernetes/gha-cache-server -f "$f" > /dev/null
           done

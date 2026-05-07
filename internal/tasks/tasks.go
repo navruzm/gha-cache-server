@@ -1,9 +1,9 @@
 package tasks
 
 import (
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
-	dbpkg "github.com/navruzm/github-actions-cache-server-go/internal/db"
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/config"
+	dbpkg "github.com/navruzm/gha-cache-server/internal/db"
+	"github.com/navruzm/gha-cache-server/internal/storage"
 )
 
 type Deps struct {

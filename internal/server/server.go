@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/auth"
-	"github.com/navruzm/github-actions-cache-server-go/internal/config"
-	"github.com/navruzm/github-actions-cache-server-go/internal/storage"
+	"github.com/navruzm/gha-cache-server/internal/auth"
+	"github.com/navruzm/gha-cache-server/internal/config"
+	"github.com/navruzm/gha-cache-server/internal/storage"
 )
 
 type Deps struct {

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/navruzm/github-actions-cache-server-go/internal/ids"
+	"github.com/navruzm/gha-cache-server/internal/ids"
 )
 
 func registerUpload(mux *http.ServeMux, d Deps) {
